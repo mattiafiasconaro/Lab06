@@ -8,10 +8,68 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
-    def handle_hello(self, e):
-        name = self._view.txt_name.value
-        if name is None or name == "":
-            self._view.create_alert("Inserire il nome")
-            return
-        self._view.txt_result.controls.append(ft.Text(f"Hello, {name}!"))
+    def addAnni(self):
+        self._view.annoSelezionato.options.append(
+            ft.dropdown.Option(key=None, text="Nessun filtro")
+        )
+        for i in self._model.getAllAnni():
+            self._view.annoSelezionato.options.append(
+                ft.dropdown.Option(key=i["anno"], text=str(i["anno"]))
+            )
+
+
+    def addBrand(self):
+        self._view.brandSelezionato.options.append(
+            ft.dropdown.Option(key=None, text="Nessun filtro")
+        )
+        for i in self._model.getAllBrand():
+            self._view.brandSelezionato.options.append(
+                ft.dropdown.Option(key=i["brand"], text=str(i["brand"]))
+            )
+
+    def addRetailer(self):
+        self._view.retailerSelezionato.options.append(
+            ft.dropdown.Option(key=None, text="Nessun filtro")
+        )
+        for i in self._model.getAllRetailer():
+            self._view.retailerSelezionato.options.append(
+                ft.dropdown.Option(key=i["name"], text=str(i["name"]))
+            )
+
+    def showTopVendite(self, e):
+        self._view.txt_result.controls.clear()
+        anno = self._view.annoSelezionato.value
+        brand = self._view.brandSelezionato.value
+        retailer = self._view.retailerSelezionato.value
+
+        for i in self._model.getAllRicavi(anno,brand,retailer):
+            if anno is None or anno=="Nessun filtro":
+                self._view.txt_result.controls.append(
+                    ft.Text(
+                        f"data : {i['Date']}; ricavo : {i['ricavo']}; retailer : {i['Retailer_code']}; Product : {i['Product_number']}")
+                )
+            elif int(anno) == i["Date"].year and brand is None or brand=="Nessun filtro":
+                self._view.txt_result.controls.append(
+                    ft.Text(
+                        f"data : {i['Date']}; ricavo : {i['ricavo']}; retailer : {i['Retailer_code']}; Product : {i['Product_number']}")
+                )
+            elif int(anno) == i["Date"].year and brand==i["Product_brand"] and retailer==i["Retailer_name"]:
+                self._view.txt_result.controls.append(
+                    ft.Text(
+                        f"data : {i['Date']}; ricavo : {i['ricavo']}; retailer : {i['Retailer_code']}; Product : {i['Product_number']}")
+                )
+
+
+
         self._view.update_page()
+
+
+
+
+
+
+
+
+
+    def analizzaVendite(self,e):
+        pass

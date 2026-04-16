@@ -20,22 +20,30 @@ class View(ft.UserControl):
 
     def load_interface(self):
         # title
-        self._title = ft.Text("Hello World", color="blue", size=24)
+        self._title = ft.Text("Analizza Vendite ", color="blue", size=24)
         self._page.controls.append(self._title)
+        self._annoSelezionato=ft.Dropdown(label="anno",
+                                          width=200)
+        self._controller.addAnni()
+        self._brandSelezionato=ft.Dropdown(label="brand",
+                                       width=200)
+        self._controller.addBrand()
+        self._retailerSelezionato = ft.Dropdown(label="retailer",
+                                             width=200,
+                                                expand=True)
+        self._controller.addRetailer()
 
-        #ROW with some controls
-        # text field for the name
-        self.txt_name = ft.TextField(
-            label="name",
-            width=200,
-            hint_text="Insert a your name"
-        )
+        row1=ft.Row(controls=[self._annoSelezionato,self._brandSelezionato,self._retailerSelezionato])
 
-        # button for the "hello" reply
-        self.btn_hello = ft.ElevatedButton(text="Hello", on_click=self._controller.handle_hello)
-        row1 = ft.Row([self.txt_name, self.btn_hello],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row1)
+        self._btnTopVendite=ft.ElevatedButton(content=ft.Text("Top Vendite"),
+                                              on_click=self._controller.showTopVendite,
+                                              width=200)
+
+        self._btnAnalizzaVendite = ft.ElevatedButton(content=ft.Text("Analizza Vendite"),
+                                                on_click=self._controller.analizzaVendite,
+                                                width=200)
+        row2=ft.Row(controls=[self._btnTopVendite,self._btnAnalizzaVendite],alignment='CENTER')
+        self._page.add(row1,row2)
 
         # List View where the reply is printed
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
@@ -49,6 +57,18 @@ class View(ft.UserControl):
     @controller.setter
     def controller(self, controller):
         self._controller = controller
+
+    @property
+    def annoSelezionato(self):
+        return self._annoSelezionato
+
+    @property
+    def brandSelezionato(self):
+        return self._brandSelezionato
+
+    @property
+    def retailerSelezionato(self):
+        return self._retailerSelezionato
 
     def set_controller(self, controller):
         self._controller = controller
