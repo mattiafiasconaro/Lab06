@@ -73,3 +73,27 @@ class DAO():
         cursor.close()
         cnx.close()
         return res
+
+    @staticmethod
+    def getAllVendite(anno, brand, retailer):
+        cnx = DBConnect.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+        query = """SELECT 
+                SUM(Quantity * Unit_sale_price) AS volume,
+                COUNT(*) AS num_vendite,
+                COUNT(DISTINCT gds.Retailer_code) AS num_retailer,
+                COUNT(DISTINCT gds.Product_number) AS num_prodotti
+            FROM go_daily_sales gds, go_products gp, go_retailers gr
+            WHERE YEAR(gds.Date) = COALESCE(%s, YEAR(gds.Date))
+            AND gp.Product_brand = COALESCE(%s, gp.Product_brand)
+            AND gr.Retailer_name = COALESCE(%s, gr.Retailer_name)
+            AND gr.Retailer_code = gds.Retailer_code
+            AND gp.Product_number=gds.Product_number"""
+
+        cursor.execute(query, (anno, brand, retailer))
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        cnx.close()
+        return res

@@ -15,3 +15,6 @@ class Model:
         return DAO.getAllRetailer()
     def getAllRicavi(self,anno,brand,retailer):
         return DAO.getAllRicavi(anno,brand,retailer)
+
+    def getAllVendite(self,anno,brand,retailer):
+        return DAO.getAllVendite(anno,brand,retailer)

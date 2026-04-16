@@ -63,13 +63,24 @@ class Controller:
 
         self._view.update_page()
 
+    def analizzaVendite(self, e):
+        self._view.txt_result.controls.clear()
+        anno = self._view.annoSelezionato.value
+        brand = self._view.brandSelezionato.value
+        retailer = self._view.retailerSelezionato.value
+
+        risultati = self._model.getAllVendite(anno, brand, retailer)
+
+        if len(risultati) == 0:
+            self._view.create_alert("Nessun risultato trovato")
+            return
+
+        i = risultati[0]
+        self._view.txt_result.controls.append(ft.Text("Statistiche vendite:"))
+        self._view.txt_result.controls.append(ft.Text(f"Giro d'affari: {i['volume']}"))
+        self._view.txt_result.controls.append(ft.Text(f"Numero vendite: {i['num_vendite']}"))
+        self._view.txt_result.controls.append(ft.Text(f"Numero retailers coinvolti: {i['num_retailer']}"))
+        self._view.txt_result.controls.append(ft.Text(f"Numero prodotti coinvolti: {i['num_prodotti']}"))
+        self._view.update_page()
 
 
-
-
-
-
-
-
-    def analizzaVendite(self,e):
-        pass
